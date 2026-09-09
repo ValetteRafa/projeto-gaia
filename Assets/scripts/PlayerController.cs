@@ -60,6 +60,26 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(direction * movementSpeed * Time.deltaTime);
 
+    private void OnTriggerEnter(Collider Other)
+    {
+        switch (Other.tag)
+        {
+            case "CamTrigger"
+                CameraBehind.SetActive(true);
+                break;
+        }
+    } 
+    private void OnTriggerExit(Collider other)
+    {
+        switch (other.tag)
+        {
+            case "Cam Trigger"
+                CameraBehind.SetActive(false);
+                break;
+        }
+    }
+
+
 
 
     }

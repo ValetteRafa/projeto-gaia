@@ -5,6 +5,10 @@ public class personagens : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        int Vida;
+        string nome;
+        int força;
+        float velocidade;
         
     }
 

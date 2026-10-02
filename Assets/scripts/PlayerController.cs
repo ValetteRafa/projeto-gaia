@@ -48,14 +48,14 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(direction * movementSpeed * Time.deltaTime);
 
-    } // ← ESTA CHAVE ESTAVA FALTANDO
+    } 
 
 
     private void OnTriggerEnter(Collider other)
     {
         switch (other.tag)
         {
-            case "CamTrigger": // ← faltava :
+            case "CamTrigger": 
                 CameraBehind.SetActive(true);
                 break;
         }
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
     {
         switch (other.tag)
         {
-            case "CamTrigger": // ← faltava :
+            case "CamTrigger": 
                 CameraBehind.SetActive(false);
                 break;
         }

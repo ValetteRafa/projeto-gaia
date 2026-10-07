@@ -11,7 +11,14 @@ public class PlayerController : MonoBehaviour
     [Header("Camera")]
     [SerializeField] private GameObject CameraBehind;
 
+    // Variáveis de Input, movimento e câmera
+    private float horizontal;
+    private float vertical;
+
     private Vector3 direction;
+
+    private bool cameraAtiva;
+
 
     void Start()
     {
@@ -19,16 +26,32 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
+
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        ControllerInput();
+        Movimento();
+        ControllerCamera();
+    }
+
+
+    // INPUTS --------------------------------------------------------------------------------------
+    private void ControllerInput()
+    {
+        horizontal = Input.GetAxis("Horizontal");
+        vertical = Input.GetAxis("Vertical");
 
         if (Input.GetButtonDown("Fire1"))
         {
             anim.SetTrigger("Attack");
         }
+    }
 
+
+    // MOVIMENTO -----------------------------------------------------------------------------
+
+    private void Movimento()
+    {
         direction = new Vector3(horizontal, 0f, vertical).normalized;
 
         if (direction.magnitude > 0.1f)
@@ -47,16 +70,23 @@ public class PlayerController : MonoBehaviour
         }
 
         controller.Move(direction * movementSpeed * Time.deltaTime);
+    }
 
-    } 
+
+    //  CAMERA -------------------------------------------------------------------------------------
+
+    private void ControllerCamera()
+    {
+        CameraBehind.SetActive(cameraAtiva);
+    }
 
 
     private void OnTriggerEnter(Collider other)
     {
         switch (other.tag)
         {
-            case "CamTrigger": 
-                CameraBehind.SetActive(true);
+            case "CamTrigger":
+                cameraAtiva = true;
                 break;
         }
     }
@@ -66,8 +96,8 @@ public class PlayerController : MonoBehaviour
     {
         switch (other.tag)
         {
-            case "CamTrigger": 
-                CameraBehind.SetActive(false);
+            case "CamTrigger":
+                cameraAtiva = false;
                 break;
         }
     }

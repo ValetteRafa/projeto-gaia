@@ -5,9 +5,12 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private CharacterController controller;
 
-    [Header("Player Configurations")]
+   
+    [SerializeField] private transform hitbox;
+    [SerializeField] private float hitRange = 0.5
+    [serializeField] private LayerMask hitMsk;
     [SerializeField] private float movementSpeed;
-
+    [Header("Player Configurations")]
     [Header("Camera")]
     [SerializeField] private GameObject CameraBehind;
 
@@ -18,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 direction;
 
     private bool cameraAtiva;
+
+    private bool isAttack;
 
 
     void Start()
@@ -41,7 +46,7 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !Attack)
         {
             anim.SetTrigger("Attack");
         }
@@ -100,5 +105,9 @@ public class PlayerController : MonoBehaviour
                 cameraAtiva = false;
                 break;
         }
+    }
+    public void Attackdone ()
+    {
+        isAttack = true 
     }
 }

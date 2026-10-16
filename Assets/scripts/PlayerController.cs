@@ -1,3 +1,5 @@
+
+
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -5,25 +7,29 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private CharacterController controller;
 
-   
-    [SerializeField] private transform hitbox;
-    [SerializeField] private float hitRange = 0.5
-    [serializeField] private LayerMask hitMsk;
-    [SerializeField] private float movementSpeed;
     [Header("Player Configurations")]
+    [SerializeField] private float movementSpeed;
+
     [Header("Camera")]
     [SerializeField] private GameObject CameraBehind;
 
-    // Variáveis de Input, movimento e câmera
     private float horizontal;
     private float vertical;
 
     private Vector3 direction;
-
     private bool cameraAtiva;
-
+    private bool isWalk;
     private bool isAttack;
 
+    [Header("Attack")]
+    [SerializeField] private ParticleSystem fxAttack;
+    [SerializeField] private Transform hitbox;
+
+    [Range(0.1f, 1f)]
+    [SerializeField] private float hitRange = 0.5f;
+
+    [SerializeField] private Collider[] hitInfo;
+    [SerializeField] private LayerMask hitMsk;
 
     void Start()
     {
@@ -31,83 +37,115 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
-
     void Update()
     {
         ControllerInput();
         Movimento();
+        UpdateAnimator();
         ControllerCamera();
     }
 
-
-    // INPUTS --------------------------------------------------------------------------------------
+    // INPUTS
     private void ControllerInput()
     {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
-        if (Input.GetButtonDown("Fire1") && !Attack)
+        if (Input.GetButtonDown("Fire1") && !isAttack)
         {
-            anim.SetTrigger("Attack");
+            Attack();
         }
     }
 
-
-    // MOVIMENTO -----------------------------------------------------------------------------
-
+    // MOVIMENTO
     private void Movimento()
     {
         direction = new Vector3(horizontal, 0f, vertical).normalized;
 
-        if (direction.magnitude > 0.1f)
+        if (direction.magnitude >= 0.1f)
         {
             float targetAngle =
                 Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
             transform.rotation =
-                Quaternion.Euler(0, targetAngle, 0);
+                Quaternion.Euler(0f, targetAngle, 0f);
 
-            anim.SetBool("Walk", true);
+            isWalk = true;
         }
         else
         {
-            anim.SetBool("Walk", false);
+            isWalk = false;
         }
 
         controller.Move(direction * movementSpeed * Time.deltaTime);
     }
 
-
-    //  CAMERA -------------------------------------------------------------------------------------
-
-    private void ControllerCamera()
+    // ANIMAÇÕES
+    private void UpdateAnimator()
     {
-        CameraBehind.SetActive(cameraAtiva);
+        anim.SetBool("Walk", isWalk);
     }
 
+    // ATAQUE
+    private void Attack()
+    {
+        isAttack = true;
+
+        anim.SetTrigger("Attack");
+
+        if (fxAttack != null)
+        {
+            fxAttack.Emit(1);
+        }
+
+        if (hitbox != null)
+        {
+            hitInfo = Physics.OverlapSphere(
+                hitbox.position,
+                hitRange,
+                hitMsk
+            );
+        }
+    }
+
+    // FINALIZAR ATAQUE
+    public void AttackDone()
+    {
+        isAttack = false;
+    }
+
+    // CÂMERA
+    private void ControllerCamera()
+    {
+        if (CameraBehind != null)
+        {
+            CameraBehind.SetActive(cameraAtiva);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        switch (other.tag)
+        if (other.CompareTag("CamTrigger"))
         {
-            case "CamTrigger":
-                cameraAtiva = true;
-                break;
+            cameraAtiva = true;
         }
     }
-
 
     private void OnTriggerExit(Collider other)
     {
-        switch (other.tag)
+        if (other.CompareTag("CamTrigger"))
         {
-            case "CamTrigger":
-                cameraAtiva = false;
-                break;
+            cameraAtiva = false;
         }
     }
-    public void Attackdone ()
+
+    // VISUALIZAR A ÁREA DO ATAQUE
+    private void OnDrawGizmosSelected()
     {
-        isAttack = true 
+        if (hitbox != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(hitbox.position, hitRange);
+        }
     }
 }

@@ -1,5 +1,4 @@
 
-
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,7 +7,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
 
     [Header("Player Configurations")]
-    [SerializeField] private float movementSpeed;
+    [SerializeField] private float movementSpeed = 5f;
 
     [Header("Camera")]
     [SerializeField] private GameObject CameraBehind;
@@ -28,8 +27,10 @@ public class PlayerController : MonoBehaviour
     [Range(0.1f, 1f)]
     [SerializeField] private float hitRange = 0.5f;
 
-    [SerializeField] private Collider[] hitInfo;
     [SerializeField] private LayerMask hitMsk;
+    [SerializeField] private int amountDamage = 10;
+
+    private Collider[] hitInfo;
 
     void Start()
     {
@@ -45,7 +46,6 @@ public class PlayerController : MonoBehaviour
         ControllerCamera();
     }
 
-    // INPUTS
     private void ControllerInput()
     {
         horizontal = Input.GetAxis("Horizontal");
@@ -57,7 +57,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // MOVIMENTO
     private void Movimento()
     {
         direction = new Vector3(horizontal, 0f, vertical).normalized;
@@ -80,17 +79,14 @@ public class PlayerController : MonoBehaviour
         controller.Move(direction * movementSpeed * Time.deltaTime);
     }
 
-    // ANIMAÇÕES
     private void UpdateAnimator()
     {
         anim.SetBool("Walk", isWalk);
     }
 
-    // ATAQUE
     private void Attack()
     {
         isAttack = true;
-
         anim.SetTrigger("Attack");
 
         if (fxAttack != null)
@@ -100,21 +96,25 @@ public class PlayerController : MonoBehaviour
 
         if (hitbox != null)
         {
-            hitInfo = Physics.OverlapSphere(
+            hitInfo = Physics.OverlapSphere
+             (
                 hitbox.position,
                 hitRange,
                 hitMsk
             );
+
+            foreach (Collider hit in hitInfo)
+            {
+                hit.gameObject.SendMessage ( "getHit", amountDamage, SendMessageOptions.DontRequireReceiver );
+            }
         }
     }
 
-    // FINALIZAR ATAQUE
     public void AttackDone()
     {
         isAttack = false;
     }
 
-    // CÂMERA
     private void ControllerCamera()
     {
         if (CameraBehind != null)
@@ -139,7 +139,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // VISUALIZAR A ÁREA DO ATAQUE
     private void OnDrawGizmosSelected()
     {
         if (hitbox != null)

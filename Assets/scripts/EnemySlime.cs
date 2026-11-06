@@ -1,5 +1,5 @@
-
 using UnityEngine;
+using System.Collections;
 
 public class EnemySlime : MonoBehaviour
 {
@@ -25,6 +25,13 @@ public class EnemySlime : MonoBehaviour
         {
             anim.SetTrigger("die");
             IsDie = true;
+            StartCoroutine(Died());
         }
+    }
+
+    private IEnumerator Died()
+    {
+        yield return new WaitForSeconds(2.5f);
+        Destroy(gameObject);
     }
 }

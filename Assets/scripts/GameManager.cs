@@ -1,14 +1,24 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public enum EnemyState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    IDLE;
+    ALERT;
+    EXPLORE;
+    PATROL;
+    FOLLOW;
+    FURY;
+
+}
+{
+
+public class GameManager : MonoBehaviour
+    
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         

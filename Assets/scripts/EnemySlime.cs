@@ -34,4 +34,28 @@ public class EnemySlime : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         Destroy(gameObject);
     }
+    
+    private void StateManager()
+    {
+        switch (State)
+        {
+            case EnemyState.IDLE:
+                break;
+            case EnemyState.ALERT:
+                break;
+            case EnemyState.EXPLORE:
+                break;
+            case EnemyState.PATROL:
+                break;
+            case EnemyState.FOLLOW:
+                break;
+            case EnemyState.FURRY:
+                break;
+           
+                private Ienumerator IdleRoutine()
+
+    
+
+       }
+   }
 }

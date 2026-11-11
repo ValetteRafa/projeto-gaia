@@ -3933,11 +3933,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1173243701402730150, guid: 74c549d1b06b6b140a1fd9536eea637f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.4264183
+      value: 6.297068
       objectReference: {fileID: 0}
     - target: {fileID: 1173243701402730150, guid: 74c549d1b06b6b140a1fd9536eea637f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.71343297
+      value: 0.49949706
       objectReference: {fileID: 0}
     - target: {fileID: 1173243701402730150, guid: 74c549d1b06b6b140a1fd9536eea637f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15587,7 +15587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b535ac6bb065b84ab3cc585df797690, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySlime
-  hp: 0
+  hp: 10
 --- !u!4 &7990710698002346282
 Transform:
   m_ObjectHideFlags: 0
